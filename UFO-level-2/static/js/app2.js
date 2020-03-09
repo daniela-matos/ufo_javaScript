@@ -1,8 +1,8 @@
 //from data.js
 //https://github.com/d3/d3-selection/blob/v1.4.1/README.md#selection_filter
 
-const filter = d3.select("#filterButton")
-const dataTable = d3.select("#entireTable")
+const filterButton = d3.select("#filterButton")
+const dataTableButton = d3.select("#entireTable")
 const inputDate = d3.select("#dateTimeInput")
 const inputCity = d3.select("#cityInput")
 const inputState = d3.select("#select-state")
@@ -27,6 +27,7 @@ const handler = function(){
   row.append("th").text("Shape")
   row.append("th").text("Duration")
   row.append("th").text("Comments")
+  
   // FIND THE INPUT VALUE
   let filterDate = inputDate.property("value")
   let filterCity = inputCity.property("value")
@@ -34,7 +35,17 @@ const handler = function(){
   let filterCountry = inputCountry.property("value")
   let filterShape = inputShape.property("value")
 
-  // FUCTION TO LOOP THROUGH THE ARRAY AND FILTER
+  // CHECK IF THERE IS INPUT
+  if (filterDate !== "" || filterCity !== "" || filterState !== "" ||filterCountry !== "" ||filterShape !== "" ){
+    // IF INPUT IS DIFFERENT THEN "", BUILD THE TABLE
+    buildTable (filterDate, filterCity, filterState, filterCountry, filterShape)
+  }
+  else {
+    //PRINT A MESSAGE
+    console.log("There is no input criteria entered")
+  }
+}
+// FUCTION TO LOOP THROUGH THE ARRAY AND FILTER
 
 const buildTable = function (filterDate, filterCity, filterState, filterCountry, filterShape) {
   // CLEAR THE TABLE IF IT IS PRESENT 
@@ -43,51 +54,56 @@ const buildTable = function (filterDate, filterCity, filterState, filterCountry,
   let filteredData = [] 
   // START FILTERING - CHECK IF A DATA WAS ENTERED
   if (filterDate.length > 0) {
-  filteredData = data.filter(record => record.datetime === filterDate)
-  }
-  else{
-  // IF IT HAS NO INPUT THE FILTERED DATA WILL BRING THE ORIGINAL TABLE
-  filteredData = data
+    filteredData = data.filter(record => record.datetime === filterDate)
   }
   // CHECK IF A CITY WAS ENTERED
   if (filterCity.length > 0) {
-  filteredData = data.filter(record => record.city === filterCity)
+    filteredData = data.filter(record => record.city === filterCity)
   }
   // CHECK IF A STATE WAS ENTERED
   if (filterState.length > 0) {
-  filteredData = data.filter(record => record.state === filterState)
+    filteredData = data.filter(record => record.state === filterState)
   }
   // CHECK IF A COUNTRY WAS ENTERED
   if (filterCountry.length > 0) {
-  filteredData = data.filter(record => record.country === filterCountry)
+    filteredData = data.filter(record => record.country === filterCountry)
   }
   // CHECK IF A SHAPE WAS ENTERED
   if (filterShape.length > 0) {
-  filteredData = data.filter(record => record.shape === filterShape)
+    filteredData = data.filter(record => record.shape === filterShape)
   }
 
   // SHOW FILTERED DATA TO THE CONSOLE
   console.log(filteredData)
-          
-  // NEW ROW FOR EACH FILTERED DATA
-          filteredData.forEach(record => {
-          let rowData = tbody.append("tr")
-          // rowData.append("td").text(record.datetime)
-          // rowData.append("td").text(record.city)
-          // rowData.append("td").text(record.state)
-          // rowData.append("td").text(record.country)
-          // rowData.append("td").text(record.shape)
-          // rowData.append("td").text(record.durationMinutes)
-          // .append("td").text(record.comments)
-          Object.entries(record).forEach(([key, value]) => {
-            let tdata = rowData.append("td")
-            tdata.text(value)
-   })
-  })
+
+   // NEW ROW FOR EACH FILTERED DATA
+   filteredData.forEach(record => {
+    let rowData = tbody.append("tr")
+    Object.entries(record).forEach(([key, value]) => {
+      let data = rowData.append("td")
+      data.text(value)
+})
+})
 }
-  // ACTION WHEN CLICK THE BUTTON OR WHEN TYPE ENTER
-  inputDate.on("change", handler)
-  filter.on("click", handler)
+
+// ACTION WHEN CLICK THE BUTTON OR WHEN TYPE ENTER
+inputDate.on("change", handler)
+filterButton.on("click", handler)
+//   // LOOP THROUGH THE ARRAY TO BRING THE TABLE
+//     data.forEach(record => {
+//       let rowData = tbody.append("tr")
+//       rowData.append("th").text(record.datetime)
+//       rowData.append("td").text(record.city)
+//       rowData.append("td").text(record.state)
+//       rowData.append("td").text(record.country)
+//       rowData.append("td").text(record.shape)
+//       rowData.append("td").text(record.durationMinutes)
+//       rowData.append("td").text(record.comments)
+//   })
+// }
+  
+   
+
   
 // ANOTHER FUNCTION TO BRING THE ENTIRE TABLE
 const entireTable = function(){ 
@@ -121,7 +137,6 @@ const entireTable = function(){
   })
 }
 
-// ENTER OR CLICK THE BUTTON AND RUN THE FUNCTION ABOVE TO SHOW THE DATA  
-// inputDate.on("change", handler)
-// filter.on("click", handler)
-dataTable.on("click", entireTable)
+//ENTER OR CLICK THE BUTTON AND RUN THE FUNCTION ABOVE TO SHOW THE DATA  
+dataTableButton.on("change", handler)
+ 

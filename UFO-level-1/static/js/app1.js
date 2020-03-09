@@ -1,8 +1,8 @@
 //from data.js
 
-const filter = d3.select("#filterButton")
-const dataTable = d3.select("#entireTable")
-const input = d3.select("#dateTimeInput")
+const filterButton = d3.select("#filterButton")
+const dataTableButton = d3.select("#entireTable")
+const inputDate = d3.select("#dateTimeInput")
 
 // MAKE THE PAGE TO HAVE A TABLE
 const table = d3.select("body").append("table").classed("table-striped", true)
@@ -29,12 +29,12 @@ const handler = function(){
     row.append("th").text("Comments")
 
   // FIND THE INPUT VALUE
-  let filterCond = input.property("value")
+  let filterCond = inputDate.property("value")
 
   // LOOP THROUGH THE ARRAY AND FILTER
     data.filter(record => record.datetime === filterCond).forEach(record => {
       let rowData = tbody.append("tr")
-      rowData.append("th").text(record.datetime)
+      rowData.append("td").text(record.datetime)
       rowData.append("td").text(record.city)
       rowData.append("td").text(record.state)
       rowData.append("td").text(record.country)
@@ -66,7 +66,7 @@ const handler = function(){
       row.append("th").text("Comments")
   
     // FIND THE INPUT VALUE
-    let filterCond = input.property("value")
+    let filterCond = inputDate.property("value")
   
     // LOOP THROUGH THE ARRAY TO BRING THE TABLE
       data.forEach(record => {
@@ -82,6 +82,6 @@ const handler = function(){
     }
 
 // ENTER OR CLICK THE BUTTON AND RUN THE FUNCTION ABOVE TO SHOW THE DATA  
-input.on("change", handler)
-filter.on("click", handler)
-dataTable.on("click", entireTable )
+inputDate.on("change", handler)
+filterButton.on("click", handler)
+dataTableButton.on("click", entireTable )
