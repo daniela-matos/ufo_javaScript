@@ -2,7 +2,7 @@
 # UFO Web Application
 
 * UFO Level 1: Completed
-* UFO Level 2: In Progress
+* UFO Level 2: Completed
 
 This project used JavaScript and DOM Manipulation to create a table dynamically, that the users can filter the table data for specific values. 
 
