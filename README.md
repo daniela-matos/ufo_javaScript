@@ -1,8 +1,8 @@
 
 # UFO Web Application
 
-* UFO Level 1: Completed
-* UFO Level 2: Completed
+* UFO Level 1: https://daniela-matos.github.io/ufo_javaScript/index_level1.html
+* UFO Level 2: https://daniela-matos.github.io/ufo_javaScript/index_level2.html
 
 This project used JavaScript and DOM Manipulation to create a table dynamically, that the users can filter the table data for specific values. 
 
