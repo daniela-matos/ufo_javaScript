@@ -56,7 +56,7 @@ let states = [
   "WY"
 ];
 
-var select = document.getElementById("select-state");
+var select = document.getElementById("state");
 
 for (let i = 0; i < states.length; i++) {
   let option = document.createElement("option");

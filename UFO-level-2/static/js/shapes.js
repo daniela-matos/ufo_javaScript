@@ -19,7 +19,7 @@ let shapes = [
   "unknown"
 ];
 
-var select = document.getElementById("select-shape");
+var select = document.getElementById("shape");
 
 for (let i = 0; i < shapes.length; i++) {
   let option = document.createElement("option");

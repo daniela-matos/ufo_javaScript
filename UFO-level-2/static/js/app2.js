@@ -1,12 +1,7 @@
-//from data.js
+//Use the array key names for the html input fields
 
 const filterButton = d3.select("#filterButton");
 const dataTableButton = d3.select("#entireTable");
-const inputDate = d3.select("#dateTimeInput");
-const inputCity = d3.select("#cityInput");
-const inputState = d3.select("#select-state");
-const inputCountry = d3.select("#countryInput");
-const inputShape = d3.select("#select-shape");
 
 // MAKE THE PAGE TO HAVE A TABLE
 const table = d3
@@ -30,11 +25,10 @@ const entireTable = function() {
   row.append("th").text("Shape");
   row.append("th").text("Duration");
   row.append("th").text("Comments");
-  // FIND THE INPUT VALUE
-  let filterCond = inputDate.property("value");
+
   // LOOP THROUGH THE ARRAY TO BRING THE TABLE
   data.forEach(record => {
-    let rowData = tbody.append("tr");
+    var rowData = tbody.append("tr");
     rowData.append("td").text(record.datetime);
     rowData.append("td").text(record.city);
     rowData.append("td").text(record.state);
@@ -47,63 +41,71 @@ const entireTable = function() {
 
 // FUNCTION WITH THE FILTERS
 const handlerFilter = function() {
-  // CLEAR THE PAGE
-  table.html("");
-  // CREATE THE BODY OF THE TABLE
-  const tbody = table.append("tbody");
-  // ADD TO THE TABLE ROWS
-  const row = tbody.append("tr");
-  // ADD THE NAME OF THE COLUMNS IN THE HEADER
-  row.append("th").text("Date/Time");
-  row.append("th").text("City");
-  row.append("th").text("State");
-  row.append("th").text("Country");
-  row.append("th").text("Shape");
-  row.append("th").text("Duration");
-  row.append("th").text("Comments");
-  // FIND THE INPUT VALUE
-  let filterDate = inputDate.property("value");
-  let filterCity = inputCity.property("value");
-  let filterState = inputState.property("value").toLowerCase();
-  let filterCountry = inputCountry.property("value");
-  let filterShape = inputShape.property("value");
-  //CREATE AN EMPTY LIST TO STORAGE THE FILTERED DATA
-  let filteredData = [];
-  // START CHECKING THE INPUT VALUES
-  // CHECK IF A DATA WAS ENTERED
-  if (filterDate.length > 0) {
-    filteredData = data.filter(record => record.datetime === filterDate);
+  var filteredData = data;
+  // CREATE AN ARRAY WITH ALL INPUT FIELDS
+  var inputId = document.getElementsByClassName("form-control");
+
+  // ITERATE THROUGH ALL INPUT FIELDS FROM ZERO
+  // TO THE LENGTH OF THE ARRAY
+  for (var i = 0; i < inputId.length; i++) {
+    var idName = inputId[i].id;
+    var field = d3.select("#" + idName).property("value");
+    // alert("Index: " + i);
+    // alert("HTML Input Field Name: " + idName);
+    // alert("HTML Input Field Value: " + field);
+
+    // TREAT EMPTY OR SPACE-ONLY FIELDS AS A SEARCH FOR ALL FOR THAT FIRLD (trim to remove empty space)
+    if (field.trim() !== "") {
+
+      // COMPARING THE VALUES IN THE JSON TO THE VALUES IN THE HTML INPUT FIELD
+      // TO FITER THE DATA IN THE TABLE
+      var filteredData = filteredData.filter(
+        record =>
+          // USINGM TOUPPERCASE() TO MATCH CASE-INSENSITIVE 
+          record[idName].toUpperCase().trim() === field.toUpperCase().trim()
+      );
+      //alert("Lenght of filtered data:" + filteredData.length)
+    }
   }
-  // CHECK IF A CITY WAS ENTERED
-  if (filterCity.length > 0) {
-    filteredData = data.filter(record => record.city === filterCity);
+
+  if (filteredData.length > 0) {
+    // CLEAR THE PAGE
+    table.html("");
+
+    // CREATE THE BODY OF THE TABLE
+    var tbody = table.append("tbody");
+    // ADD TO THE TABLE ROWS
+    var row = tbody.append("tr");
+    // ADD THE NAME OF THE COLUMNS IN THE HEADER
+    row.append("th").text("Date/Time");
+    row.append("th").text("City");
+    row.append("th").text("State");
+    row.append("th").text("Country");
+    row.append("th").text("Shape");
+    row.append("th").text("Duration");
+    row.append("th").text("Comments");
+
+    // Iterate through the filtered jSON data
+    filteredData.forEach(record => {
+      var rowData = tbody.append("tr");
+      rowData.append("td").text(record.datetime);
+      rowData.append("td").text(record.city);
+      rowData.append("td").text(record.state);
+      rowData.append("td").text(record.country);
+      rowData.append("td").text(record.shape);
+      rowData.append("td").text(record.durationMinutes);
+      rowData.append("td").text(record.comments);
+    });
+  } else {
+    // CLEAR THE PAGE
+    table.html("");
+    // CREATE THE BODY OF THE TABLE
+    var tbody = table.append("tbody");
+    var rowData = tbody.append("tr");
+    rowData.append("td").text("No data found");
   }
-  // CHECK IF A STATE WAS ENTERED
-  if (filterState.length > 0) {
-    filteredData = data.filter(record => record.state === filterState);
-  }
-  // CHECK IF A COUNTRY WAS ENTERED
-  if (filterCountry.length > 0) {
-    filteredData = data.filter(record => record.country === filterCountry);
-  }
-  // CHECK IF A SHAPE WAS ENTERED
-  if (filterShape.length > 0) {
-    filteredData = data.filter(record => record.shape === filterShape);
-  }
-  //CREATE A NEW ROW FOR EACH SET O FILTERED DATA
-  filteredData.forEach(record => {
-    let row = tbody.append("tr");
-    row.append("td").text(record.datetime);
-    row.append("td").text(record.city);
-    row.append("td").text(record.state);
-    row.append("td").text(record.country);
-    row.append("td").text(record.shape);
-    row.append("td").text(record.durationMinutes);
-    row.append("td").text(record.comments);
-  });
 };
 
 // ENTER OR CLICK THE BUTTON AND RUN THE FUNCTION ABOVE TO SHOW THE DATA
-inputDate.on("change", handlerFilter);
 filterButton.on("click", handlerFilter);
 dataTableButton.on("click", entireTable);
